@@ -1,5 +1,4 @@
-
-const CACHE_NAME = 'pulapocket-v1';
+const CACHE_NAME = 'pulapocket-v3';
 const URLS_TO_CACHE = [
   '/',
   '/index.html',
@@ -17,8 +16,7 @@ const URLS_TO_CACHE = [
   '/pages/Savings.tsx',
   '/pages/Forex.tsx',
   '/pages/Settings.tsx',
-  '/icon-192.png',
-  '/icon-512.png',
+  '/icon.svg',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap',
   'https://esm.sh/react@^19.2.3',
@@ -29,6 +27,7 @@ const URLS_TO_CACHE = [
 
 // Install the service worker and cache the app shell
 self.addEventListener('install', event => {
+  self.skipWaiting(); // Force new SW to activate immediately
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -56,8 +55,8 @@ self.addEventListener('fetch', event => {
             if (!response || response.status !== 200) {
               return response;
             }
-            // Also ignore chrome-extension requests
-            if (event.request.url.startsWith('chrome-extension://')) {
+            // Also ignore chrome-extension requests or non-http
+            if (!event.request.url.startsWith('http')) {
                 return response;
             }
 
@@ -69,7 +68,9 @@ self.addEventListener('fetch', event => {
 
             return response;
           }
-        );
+        ).catch(() => {
+          // Fallback logic if needed, but cache-first covers most
+        });
       })
   );
 });
@@ -78,15 +79,18 @@ self.addEventListener('fetch', event => {
 self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                if (cacheWhitelist.indexOf(cacheName) === -1) {
+                    console.log('Deleting old cache:', cacheName);
+                    return caches.delete(cacheName);
+                }
+                })
+            );
+        }),
+        self.clients.claim() // Take control of all clients immediately
+    ])
   );
 });

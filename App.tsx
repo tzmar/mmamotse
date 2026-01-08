@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { LayoutDashboard, ReceiptText, PiggyBank, BadgeDollarSign, Settings as SettingsIcon } from 'lucide-react';
 import { Branding } from './components/Branding';
@@ -15,7 +14,11 @@ import Forex from './pages/Forex';
 import SettingsPage from './pages/Settings';
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<View>('dashboard');
+  // Persist Current View
+  const [currentView, setCurrentView] = useState<View>(() => {
+    const saved = localStorage.getItem('pula_view');
+    return (saved as View) || 'dashboard';
+  });
   
   // Persisted States
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
@@ -43,6 +46,10 @@ const App: React.FC = () => {
   });
 
   // Sync to LocalStorage
+  useEffect(() => {
+    localStorage.setItem('pula_view', currentView);
+  }, [currentView]);
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
   }, [transactions]);
