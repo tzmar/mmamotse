@@ -1,0 +1,26 @@
+
+{
+  "short_name": "PulaPocket",
+  "name": "PulaPocket: Botswana FinTech",
+  "description": "A professional financial management PWA for the Botswana market featuring glassmorphism design and local persistence.",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "orientation": "portrait-primary",
+  "scope": "/"
+}
