@@ -1,5 +1,4 @@
-
-import React, { useState, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { GlassCard } from '../components/GlassCard';
 import { Transaction, Settings, TransactionType } from '../types';
 import { CURRENCY_SYMBOL } from '../constants';
@@ -10,6 +9,28 @@ interface TransactionDeskProps {
   setTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
   settings: Settings;
 }
+
+// Optimization: Memoized Row Component to prevent full list re-render on input change
+const TransactionRow = React.memo(({ t, onDelete }: { t: Transaction, onDelete: (id: string) => void }) => (
+  <tr className="group hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+    <td className="py-4 text-sm opacity-60 font-mono">{new Date(t.date).toLocaleDateString()}</td>
+    <td className="py-4">
+      <p className="font-bold">{t.category}</p>
+      <p className="text-xs opacity-40 truncate max-w-[150px]">{t.note || 'No note'}</p>
+    </td>
+    <td className={`py-4 text-right font-black ${t.type === 'IN' ? 'text-emerald-500' : 'text-rose-500'}`}>
+      {t.type === 'IN' ? '+' : '-'}{CURRENCY_SYMBOL}{t.amount.toLocaleString()}
+    </td>
+    <td className="py-4 text-center">
+      <button
+        onClick={() => onDelete(t.id)}
+        className="p-2 text-rose-500/40 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all active:scale-95"
+      >
+        <Trash2 size={16} />
+      </button>
+    </td>
+  </tr>
+));
 
 const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTransactions, settings }) => {
   const [formData, setFormData] = useState({
@@ -39,7 +60,7 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
       newErrors.date = 'Please select a date.';
     } else {
       const today = new Date();
-      today.setHours(23, 59, 59, 999); // Set to end of today to include today
+      today.setHours(23, 59, 59, 999);
       if (new Date(formData.date) > today) {
         newErrors.date = 'Future dates are not allowed.';
       }
@@ -113,9 +134,10 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
     setErrors({});
   };
 
-  const deleteTransaction = (id: string) => {
+  // Memoized callback to ensure row stability
+  const deleteTransaction = useCallback((id: string) => {
     setTransactions(prev => prev.filter(t => t.id !== id));
-  };
+  }, [setTransactions]);
 
   const exportCSV = () => {
     const headers = ['Date', 'Type', 'Category', 'Amount', 'Note'];
@@ -135,7 +157,7 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
   const normalClass = "focus:ring-blue-500";
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out">
       <header className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
         <div className="space-y-2">
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight">Transaction Desk</h1>
@@ -143,7 +165,7 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
         </div>
         <button 
           onClick={exportCSV}
-          className="glass hover:bg-black/5 dark:hover:bg-white/10 px-6 py-3 rounded-2xl flex items-center justify-center sm:justify-start gap-3 font-bold transition-all text-sm uppercase tracking-widest flex-shrink-0"
+          className="glass hover:bg-black/5 dark:hover:bg-white/10 px-6 py-3 rounded-2xl flex items-center justify-center sm:justify-start gap-3 font-bold transition-all text-sm uppercase tracking-widest flex-shrink-0 active:scale-95"
         >
           <Download size={18} /> Export Report
         </button>
@@ -166,14 +188,14 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, type: 'IN', category: '' })}
-                  className={`py-2 rounded-xl text-xs font-black uppercase transition-all ${formData.type === 'IN' ? 'bg-emerald-600 text-white shadow-lg' : 'opacity-40'}`}
+                  className={`py-2 rounded-xl text-xs font-black uppercase transition-all active:scale-95 ${formData.type === 'IN' ? 'bg-emerald-600 text-white shadow-lg' : 'opacity-40'}`}
                 >
                   Money In
                 </button>
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, type: 'OUT', category: '' })}
-                  className={`py-2 rounded-xl text-xs font-black uppercase transition-all ${formData.type === 'OUT' ? 'bg-rose-600 text-white shadow-lg' : 'opacity-40'}`}
+                  className={`py-2 rounded-xl text-xs font-black uppercase transition-all active:scale-95 ${formData.type === 'OUT' ? 'bg-rose-600 text-white shadow-lg' : 'opacity-40'}`}
                 >
                   Money Out
                 </button>
@@ -234,7 +256,7 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-500/20 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
+                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-500/20 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm active:scale-95"
               >
                 <Plus size={20} /> Post Transaction
               </button>
@@ -263,24 +285,7 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
                     </tr>
                   ) : (
                     transactions.map(t => (
-                      <tr key={t.id} className="group hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                        <td className="py-4 text-sm opacity-60 font-mono">{new Date(t.date).toLocaleDateString()}</td>
-                        <td className="py-4">
-                          <p className="font-bold">{t.category}</p>
-                          <p className="text-xs opacity-40 truncate max-w-[150px]">{t.note || 'No note'}</p>
-                        </td>
-                        <td className={`py-4 text-right font-black ${t.type === 'IN' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                          {t.type === 'IN' ? '+' : '-'}{CURRENCY_SYMBOL}{t.amount.toLocaleString()}
-                        </td>
-                        <td className="py-4 text-center">
-                          <button
-                            onClick={() => deleteTransaction(t.id)}
-                            className="p-2 text-rose-500/40 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </td>
-                      </tr>
+                      <TransactionRow key={t.id} t={t} onDelete={deleteTransaction} />
                     ))
                   )}
                 </tbody>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { GlassCard } from '../components/GlassCard';
 import { Settings } from '../types';
@@ -47,10 +46,10 @@ const SettingsPage: React.FC<SettingsProps> = ({ settings, setSettings }) => {
     }));
   };
 
-  const inputClass = "flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none";
+  const inputClass = "w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none";
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out pb-10">
       <header className="space-y-2">
         <h1 className="text-5xl font-black tracking-tight">Configuration</h1>
         <p className="opacity-50 font-bold uppercase tracking-widest text-sm">Personalize Your Finance Engine</p>
@@ -78,16 +77,18 @@ const SettingsPage: React.FC<SettingsProps> = ({ settings, setSettings }) => {
             <h2 className="text-xl font-black uppercase tracking-wider opacity-70">Money In Categories</h2>
           </div>
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <input
-                value={newIn}
-                onChange={e => setNewIn(e.target.value)}
-                placeholder="New Inflow Category..."
-                className={inputClass}
-              />
+            <div className="flex items-center gap-3">
+              <div className="flex-1 min-w-0">
+                <input
+                  value={newIn}
+                  onChange={e => setNewIn(e.target.value)}
+                  placeholder="New Inflow Category..."
+                  className={inputClass}
+                />
+              </div>
               <button 
                 onClick={() => addCategory('IN')}
-                className="bg-emerald-600 p-2 rounded-xl text-white shadow-lg shadow-emerald-500/20"
+                className="bg-emerald-600 p-3 rounded-xl text-white shadow-lg shadow-emerald-500/20 shrink-0 hover:bg-emerald-500 transition-colors active:scale-95"
               >
                 <Plus size={20} />
               </button>
@@ -112,16 +113,18 @@ const SettingsPage: React.FC<SettingsProps> = ({ settings, setSettings }) => {
             <h2 className="text-xl font-black uppercase tracking-wider opacity-70">Money Out Categories</h2>
           </div>
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <input
-                value={newOut}
-                onChange={e => setNewOut(e.target.value)}
-                placeholder="New Outflow Category..."
-                className={inputClass}
-              />
+            <div className="flex items-center gap-3">
+              <div className="flex-1 min-w-0">
+                <input
+                  value={newOut}
+                  onChange={e => setNewOut(e.target.value)}
+                  placeholder="New Outflow Category..."
+                  className={inputClass}
+                />
+              </div>
               <button 
                 onClick={() => addCategory('OUT')}
-                className="bg-rose-600 p-2 rounded-xl text-white shadow-lg shadow-rose-500/20"
+                className="bg-rose-600 p-3 rounded-xl text-white shadow-lg shadow-rose-500/20 shrink-0 hover:bg-rose-500 transition-colors active:scale-95"
               >
                 <Plus size={20} />
               </button>

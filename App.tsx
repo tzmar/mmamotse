@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LayoutDashboard, ReceiptText, PiggyBank, BadgeDollarSign, Settings as SettingsIcon } from 'lucide-react';
 import { Branding } from './components/Branding';
 import { OfflineIndicator } from './components/OfflineIndicator';
@@ -45,6 +45,45 @@ const App: React.FC = () => {
     return saved ? JSON.parse(saved) : { 'ZAR': 1.35, 'USD': 0.075 };
   });
 
+  // Swipe Navigation Logic
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const minSwipeDistance = 50;
+
+  const navOrder: View[] = ['dashboard', 'transactions', 'savings', 'forex', 'settings'];
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe || isRightSwipe) {
+      const currentIndex = navOrder.indexOf(currentView);
+      
+      // Swipe Left -> Go Next
+      if (isLeftSwipe && currentIndex < navOrder.length - 1) {
+         setCurrentView(navOrder[currentIndex + 1]);
+         window.scrollTo(0, 0); // Reset scroll on view change
+      }
+      
+      // Swipe Right -> Go Previous
+      if (isRightSwipe && currentIndex > 0) {
+         setCurrentView(navOrder[currentIndex - 1]);
+         window.scrollTo(0, 0); // Reset scroll on view change
+      }
+    }
+  };
+
   // Sync to LocalStorage
   useEffect(() => {
     localStorage.setItem('pula_view', currentView);
@@ -75,7 +114,12 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-24 md:pb-0 md:pl-72 flex flex-col">
+    <div 
+      className="min-h-screen pb-24 md:pb-0 md:pl-72 flex flex-col"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       <OfflineIndicator />
 
       {/* Sidebar - Desktop */}

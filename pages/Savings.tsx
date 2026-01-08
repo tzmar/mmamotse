@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { GlassCard } from '../components/GlassCard';
 import { SavingsGoal } from '../types';
@@ -46,7 +45,7 @@ const Savings: React.FC<SavingsProps> = ({ goals, setGoals }) => {
   const inputClass = "w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none";
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out">
       <header className="space-y-2">
         <h1 className="text-5xl font-black tracking-tight">Savings Goals</h1>
         <p className="opacity-50 font-bold uppercase tracking-widest text-sm">Target Your Future Investments</p>
@@ -81,7 +80,7 @@ const Savings: React.FC<SavingsProps> = ({ goals, setGoals }) => {
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-500/20 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
+                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-500/20 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-xs active:scale-95"
               >
                 <Plus size={18} /> Create Goal
               </button>
@@ -103,7 +102,7 @@ const Savings: React.FC<SavingsProps> = ({ goals, setGoals }) => {
                 <GlassCard key={goal.id} className="relative overflow-hidden group">
                   <button 
                     onClick={() => deleteGoal(goal.id)}
-                    className="absolute top-4 right-4 text-rose-500/30 hover:text-rose-500 transition-colors"
+                    className="absolute top-4 right-4 text-rose-500/30 hover:text-rose-500 transition-colors active:scale-90"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -135,7 +134,7 @@ const Savings: React.FC<SavingsProps> = ({ goals, setGoals }) => {
                     />
                     <button
                       onClick={() => handleInjection(goal.id)}
-                      className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-xl transition-all shadow-lg shadow-emerald-500/20"
+                      className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
                     >
                       <TrendingUp size={20} />
                     </button>

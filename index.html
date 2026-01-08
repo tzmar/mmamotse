@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PulaPocket | Botswana FinTech</title>
     
     <!-- PWA Manifest and Theme -->
@@ -11,7 +11,7 @@
     <link rel="icon" type="image/svg+xml" href="./icon.svg">
     <link rel="apple-touch-icon" href="./icon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -27,6 +27,12 @@
             /* Prevent pull-to-refresh on mobile */
             overscroll-behavior-y: none;
         }
+        
+        /* PERFORMANCE: Remove 300ms tap delay on buttons/inputs */
+        button, input, select, textarea, a {
+            touch-action: manipulation;
+        }
+
         @keyframes pulse-gradient {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
@@ -34,12 +40,16 @@
         .animate-pulse-slow {
             animation: pulse-gradient 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
+        
         /* Updated glassmorphism for pure white/black themes */
         .glass {
             background: rgba(0, 0, 0, 0.03); /* Subtle dark glass for light mode */
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(0, 0, 0, 0.05);
+            /* PERFORMANCE: Promote to own layer to avoid repaint */
+            transform: translateZ(0);
+            will-change: transform, opacity;
         }
         .dark .glass {
             background: rgba(255, 255, 255, 0.05); /* Subtle light glass for dark mode */

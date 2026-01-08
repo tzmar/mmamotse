@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { GlassCard } from '../components/GlassCard';
 import { Transaction, Settings } from '../types';
@@ -55,7 +54,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
   const COLORS = ['#2563eb', '#06b6d4', '#8b5cf6', '#f43f5e', '#f59e0b', '#10b981'];
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out">
       <header className="space-y-2">
         <h1 className="text-5xl font-black tracking-tight">Mmamotse Overview</h1>
         <p className="opacity-50 font-bold uppercase tracking-widest text-sm">Financial Health Dashboard</p>
@@ -98,7 +97,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <GlassCard>
           <h2 className="text-xl font-black mb-6 uppercase tracking-wider opacity-70">Expense Distribution</h2>
-          <div className="h-80 w-full">
+          <div className="h-80 w-full transform-gpu">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -110,6 +109,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
                   paddingAngle={5}
                   dataKey="value"
                   stroke="none"
+                  animationDuration={800} 
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -132,7 +132,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
 
         <GlassCard>
           <h2 className="text-xl font-black mb-6 uppercase tracking-wider opacity-70">Weekly Cash Flow</h2>
-          <div className="h-80 w-full">
+          <div className="h-80 w-full transform-gpu">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData}>
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
@@ -147,8 +147,8 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
                     fontWeight: 'bold'
                   }} 
                 />
-                <Bar dataKey="in" fill="#10b981" radius={[4, 4, 0, 0]} name="In" />
-                <Bar dataKey="out" fill="#f43f5e" radius={[4, 4, 0, 0]} name="Out" />
+                <Bar dataKey="in" fill="#10b981" radius={[4, 4, 0, 0]} name="In" animationDuration={800} />
+                <Bar dataKey="out" fill="#f43f5e" radius={[4, 4, 0, 0]} name="Out" animationDuration={800} />
               </BarChart>
             </ResponsiveContainer>
           </div>
