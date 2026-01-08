@@ -45,17 +45,17 @@ const Savings: React.FC<SavingsProps> = ({ goals, setGoals }) => {
   const inputClass = "w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none";
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out">
-      <header className="space-y-2">
-        <h1 className="text-5xl font-black tracking-tight">Savings Goals</h1>
-        <p className="opacity-50 font-bold uppercase tracking-widest text-sm">Target Your Future Investments</p>
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out pb-20">
+      <header className="space-y-1 sm:space-y-2">
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight">Savings Goals</h1>
+        <p className="opacity-50 font-bold uppercase tracking-widest text-xs sm:text-sm">Target Your Future Investments</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
         {/* Creation Form */}
         <div className="md:col-span-1">
           <GlassCard>
-            <h2 className="text-xl font-black mb-6 uppercase tracking-wider opacity-70">New Target</h2>
+            <h2 className="text-lg sm:text-xl font-black mb-6 uppercase tracking-wider opacity-70">New Target</h2>
             <form onSubmit={addGoal} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-[10px] font-black uppercase opacity-40 ml-2">Goal Name</label>
@@ -107,7 +107,7 @@ const Savings: React.FC<SavingsProps> = ({ goals, setGoals }) => {
                     <Trash2 size={16} />
                   </button>
                   <div className="mb-6">
-                    <h3 className="text-2xl font-black mb-1">{goal.name}</h3>
+                    <h3 className="text-xl sm:text-2xl font-black mb-1 truncate pr-8">{goal.name}</h3>
                     <p className="text-xs font-bold opacity-40 tracking-widest uppercase">Target: {CURRENCY_SYMBOL}{goal.target.toLocaleString()}</p>
                   </div>
 
@@ -130,11 +130,11 @@ const Savings: React.FC<SavingsProps> = ({ goals, setGoals }) => {
                       placeholder="Add..."
                       value={injection[goal.id] || ''}
                       onChange={e => setInjection({ ...injection, [goal.id]: e.target.value })}
-                      className="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none text-sm font-bold"
+                      className="flex-1 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none text-sm font-bold w-full min-w-0"
                     />
                     <button
                       onClick={() => handleInjection(goal.id)}
-                      className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
+                      className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95 flex-shrink-0"
                     >
                       <TrendingUp size={20} />
                     </button>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pulapocket-v10';
+const CACHE_NAME = 'pulapocket-v11';
 const URLS_TO_CACHE = [
   './',
   './index.html',

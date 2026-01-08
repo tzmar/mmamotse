@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PulaPocket | Botswana FinTech</title>
     
     <!-- PWA Manifest and Theme -->
@@ -13,21 +13,52 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
           darkMode: 'class',
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['Inter', 'sans-serif'],
+              },
+              animation: {
+                'pulse-slow': 'pulse-gradient 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              }
+            }
+          }
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
-            /* Prevent pull-to-refresh on mobile */
             overscroll-behavior-y: none;
+            background-color: #f8fafc; /* Fallback light bg */
+            margin: 0;
         }
         
+        @media (prefers-color-scheme: dark) {
+            body { background-color: #000000; color: white; }
+        }
+
+        /* CRITICAL FALLBACKS: styling that applies before Tailwind loads */
+        .hidden { display: none !important; }
+        
+        @media (min-width: 768px) {
+            .md\:flex { display: flex !important; }
+            .md\:hidden { display: none !important; }
+            .md\:pl-72 { padding-left: 18rem; }
+        }
+
+        @media (max-width: 767px) {
+             /* Force hide sidebar content on mobile if Tailwind fails */
+             aside.hidden { display: none !important; }
+        }
+
         /* PERFORMANCE: Remove 300ms tap delay on buttons/inputs */
         button, input, select, textarea, a {
             touch-action: manipulation;
@@ -41,33 +72,23 @@
             animation: pulse-gradient 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
         
-        /* Updated glassmorphism for pure white/black themes */
+        /* Updated glassmorphism */
         .glass {
-            background: rgba(0, 0, 0, 0.03); /* Subtle dark glass for light mode */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            /* PERFORMANCE: Promote to own layer to avoid repaint */
-            transform: translateZ(0);
-            will-change: transform, opacity;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         .dark .glass {
-            background: rgba(255, 255, 255, 0.05); /* Subtle light glass for dark mode */
+            background: rgba(20, 20, 20, 0.6); 
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        /* Custom scrollbar for glass aesthetic */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.2);
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); }
+        .dark ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
     </style>
 <script type="importmap">
 {
@@ -81,9 +102,8 @@
 }
 </script>
 </head>
-<body class="bg-white dark:bg-black text-slate-900 dark:text-slate-100 transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-black text-slate-900 dark:text-slate-100 transition-colors duration-300">
     <div id="root"></div>
-    <!-- Entry Point for React Application -->
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>

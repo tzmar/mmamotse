@@ -13,12 +13,12 @@ interface TransactionDeskProps {
 // Optimization: Memoized Row Component to prevent full list re-render on input change
 const TransactionRow = React.memo(({ t, onDelete }: { t: Transaction, onDelete: (id: string) => void }) => (
   <tr className="group hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-    <td className="py-4 text-sm opacity-60 font-mono">{new Date(t.date).toLocaleDateString()}</td>
+    <td className="py-4 text-xs sm:text-sm opacity-60 font-mono">{new Date(t.date).toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' })}</td>
     <td className="py-4">
-      <p className="font-bold">{t.category}</p>
-      <p className="text-xs opacity-40 truncate max-w-[150px]">{t.note || 'No note'}</p>
+      <p className="font-bold text-sm sm:text-base">{t.category}</p>
+      <p className="text-[10px] sm:text-xs opacity-40 truncate max-w-[100px] sm:max-w-[150px]">{t.note || 'No note'}</p>
     </td>
-    <td className={`py-4 text-right font-black ${t.type === 'IN' ? 'text-emerald-500' : 'text-rose-500'}`}>
+    <td className={`py-4 text-right font-black text-sm sm:text-base ${t.type === 'IN' ? 'text-emerald-500' : 'text-rose-500'}`}>
       {t.type === 'IN' ? '+' : '-'}{CURRENCY_SYMBOL}{t.amount.toLocaleString()}
     </td>
     <td className="py-4 text-center">
@@ -157,32 +157,32 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
   const normalClass = "focus:ring-blue-500";
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out">
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out pb-20">
       <header className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
-        <div className="space-y-2">
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight">Transaction Desk</h1>
-          <p className="opacity-50 font-bold uppercase tracking-widest text-sm">Post Your Inflow & Outflow</p>
+        <div className="space-y-1 sm:space-y-2">
+          <h1 className="text-3xl sm:text-5xl font-black tracking-tight">Transaction Desk</h1>
+          <p className="opacity-50 font-bold uppercase tracking-widest text-xs sm:text-sm">Post Your Inflow & Outflow</p>
         </div>
         <button 
           onClick={exportCSV}
-          className="glass hover:bg-black/5 dark:hover:bg-white/10 px-6 py-3 rounded-2xl flex items-center justify-center sm:justify-start gap-3 font-bold transition-all text-sm uppercase tracking-widest flex-shrink-0 active:scale-95"
+          className="glass hover:bg-black/5 dark:hover:bg-white/10 px-6 py-3 rounded-2xl flex items-center justify-center sm:justify-start gap-3 font-bold transition-all text-xs sm:text-sm uppercase tracking-widest flex-shrink-0 active:scale-95"
         >
           <Download size={18} /> Export Report
         </button>
       </header>
 
       {warning && (
-        <div className="bg-amber-500/20 border border-amber-500/50 p-4 rounded-3xl flex items-center gap-4 text-amber-500 font-bold animate-pulse">
-          <AlertTriangle />
-          {warning}
+        <div className="bg-amber-500/20 border border-amber-500/50 p-4 rounded-3xl flex items-center gap-4 text-amber-500 font-bold animate-pulse text-sm">
+          <AlertTriangle className="flex-shrink-0" />
+          <p>{warning}</p>
         </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Form */}
         <div className="lg:col-span-1">
-          <GlassCard className="sticky top-6">
-            <h2 className="text-xl font-black mb-6 uppercase tracking-wider opacity-70">New Entry</h2>
+          <GlassCard className="lg:sticky lg:top-6">
+            <h2 className="text-lg sm:text-xl font-black mb-6 uppercase tracking-wider opacity-70">New Entry</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-2 p-1 bg-black/5 dark:bg-black/20 rounded-2xl">
                 <button
@@ -267,15 +267,15 @@ const TransactionDesk: React.FC<TransactionDeskProps> = ({ transactions, setTran
         {/* Statement Table */}
         <div className="lg:col-span-2">
           <GlassCard className="overflow-hidden">
-            <h2 className="text-xl font-black mb-6 uppercase tracking-wider opacity-70">Recent Statement</h2>
+            <h2 className="text-lg sm:text-xl font-black mb-6 uppercase tracking-wider opacity-70">Recent Statement</h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-left">
+              <table className="w-full text-left min-w-[300px]">
                 <thead>
                   <tr className="border-b border-black/5 dark:border-white/10">
-                    <th className="pb-4 text-[10px] font-black uppercase opacity-40">Date</th>
+                    <th className="pb-4 text-[10px] font-black uppercase opacity-40 w-16">Date</th>
                     <th className="pb-4 text-[10px] font-black uppercase opacity-40">Detail</th>
                     <th className="pb-4 text-[10px] font-black uppercase opacity-40 text-right">Amount</th>
-                    <th className="pb-4 text-[10px] font-black uppercase opacity-40 text-center">Action</th>
+                    <th className="pb-4 text-[10px] font-black uppercase opacity-40 text-center w-10">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/5 dark:divide-white/5">

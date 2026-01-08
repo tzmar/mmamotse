@@ -54,14 +54,14 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
   const COLORS = ['#2563eb', '#06b6d4', '#8b5cf6', '#f43f5e', '#f59e0b', '#10b981'];
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out">
-      <header className="space-y-2">
-        <h1 className="text-5xl font-black tracking-tight">Mmamotse Overview</h1>
-        <p className="opacity-50 font-bold uppercase tracking-widest text-sm">Financial Health Dashboard</p>
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out">
+      <header className="space-y-1 sm:space-y-2">
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight truncate">Mmamotse Overview</h1>
+        <p className="opacity-50 font-bold uppercase tracking-widest text-xs sm:text-sm">Financial Health Dashboard</p>
       </header>
 
       {/* Key Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <GlassCard className="bg-gradient-to-br from-blue-600/20 to-transparent border-blue-500/20">
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/30">
@@ -69,35 +69,37 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
             </div>
             <p className="text-xs font-black uppercase tracking-widest opacity-50">Total Balance</p>
           </div>
-          <p className="text-4xl font-black">{CURRENCY_SYMBOL} {stats.balance.toLocaleString()}</p>
+          <p className="text-3xl sm:text-4xl font-black break-words">{CURRENCY_SYMBOL} {stats.balance.toLocaleString()}</p>
         </GlassCard>
 
-        <GlassCard className="bg-gradient-to-br from-emerald-600/20 to-transparent border-emerald-500/20">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-emerald-600 rounded-2xl shadow-lg shadow-emerald-500/30">
-              <ArrowUpCircle className="text-white" size={24} />
+        <div className="grid grid-cols-2 gap-4 md:contents">
+            <GlassCard className="bg-gradient-to-br from-emerald-600/20 to-transparent border-emerald-500/20">
+            <div className="flex items-center gap-3 mb-2 sm:mb-4">
+                <div className="p-2 sm:p-3 bg-emerald-600 rounded-2xl shadow-lg shadow-emerald-500/30">
+                <ArrowUpCircle className="text-white" size={20} />
+                </div>
+                <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest opacity-50">In</p>
             </div>
-            <p className="text-xs font-black uppercase tracking-widest opacity-50">Money In</p>
-          </div>
-          <p className="text-4xl font-black">{CURRENCY_SYMBOL} {stats.in.toLocaleString()}</p>
-        </GlassCard>
+            <p className="text-xl sm:text-4xl font-black truncate">{CURRENCY_SYMBOL} {stats.in.toLocaleString()}</p>
+            </GlassCard>
 
-        <GlassCard className="bg-gradient-to-br from-rose-600/20 to-transparent border-rose-500/20">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-rose-600 rounded-2xl shadow-lg shadow-rose-500/30">
-              <ArrowDownCircle className="text-white" size={24} />
+            <GlassCard className="bg-gradient-to-br from-rose-600/20 to-transparent border-rose-500/20">
+            <div className="flex items-center gap-3 mb-2 sm:mb-4">
+                <div className="p-2 sm:p-3 bg-rose-600 rounded-2xl shadow-lg shadow-rose-500/30">
+                <ArrowDownCircle className="text-white" size={20} />
+                </div>
+                <p className="text-[10px] sm:text-xs font-black uppercase tracking-widest opacity-50">Out</p>
             </div>
-            <p className="text-xs font-black uppercase tracking-widest opacity-50">Money Out</p>
-          </div>
-          <p className="text-4xl font-black">{CURRENCY_SYMBOL} {stats.out.toLocaleString()}</p>
-        </GlassCard>
+            <p className="text-xl sm:text-4xl font-black truncate">{CURRENCY_SYMBOL} {stats.out.toLocaleString()}</p>
+            </GlassCard>
+        </div>
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         <GlassCard>
-          <h2 className="text-xl font-black mb-6 uppercase tracking-wider opacity-70">Expense Distribution</h2>
-          <div className="h-80 w-full transform-gpu">
+          <h2 className="text-lg sm:text-xl font-black mb-6 uppercase tracking-wider opacity-70">Expense Distribution</h2>
+          <div className="h-64 sm:h-80 w-full transform-gpu">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -105,7 +107,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
-                  outerRadius={100}
+                  outerRadius={80}
                   paddingAngle={5}
                   dataKey="value"
                   stroke="none"
@@ -121,21 +123,22 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
                     borderRadius: '1rem', 
                     border: 'none',
                     color: '#fff',
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
+                    fontSize: '12px'
                   }} 
                 />
-                <Legend iconType="circle" />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 'bold', opacity: 0.7 }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </GlassCard>
 
         <GlassCard>
-          <h2 className="text-xl font-black mb-6 uppercase tracking-wider opacity-70">Weekly Cash Flow</h2>
-          <div className="h-80 w-full transform-gpu">
+          <h2 className="text-lg sm:text-xl font-black mb-6 uppercase tracking-wider opacity-70">Weekly Cash Flow</h2>
+          <div className="h-64 sm:h-80 w-full transform-gpu">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData}>
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold', fill: 'currentColor', opacity: 0.5 }} />
                 <YAxis hide />
                 <Tooltip 
                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
@@ -144,7 +147,8 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions }) => {
                     borderRadius: '1rem', 
                     border: 'none',
                     color: '#fff',
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
+                    fontSize: '12px'
                   }} 
                 />
                 <Bar dataKey="in" fill="#10b981" radius={[4, 4, 0, 0]} name="In" animationDuration={800} />
