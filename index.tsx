@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -21,7 +20,8 @@ root.render(
 // Basic Service Worker registration for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
+    // Use relative path for better compatibility with hybrid app routing
+    navigator.serviceWorker.register('./sw.js').catch((err) => {
       console.log('SW registration failed: ', err);
     });
   });

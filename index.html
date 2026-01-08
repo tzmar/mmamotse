@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>PulaPocket | Botswana FinTech</title>
     
     <!-- PWA Manifest and Theme -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#000000" />
-    <link rel="icon" type="image/svg+xml" href="/icon.svg">
-    <link rel="apple-touch-icon" href="/icon.svg">
+    <link rel="icon" type="image/svg+xml" href="./icon.svg">
+    <link rel="apple-touch-icon" href="./icon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -24,6 +24,8 @@
         body {
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            /* Prevent pull-to-refresh on mobile */
+            overscroll-behavior-y: none;
         }
         @keyframes pulse-gradient {
             0%, 100% { opacity: 1; }
@@ -71,5 +73,7 @@
 </head>
 <body class="bg-white dark:bg-black text-slate-900 dark:text-slate-100 transition-colors duration-300">
     <div id="root"></div>
+    <!-- Entry Point for React Application -->
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>
